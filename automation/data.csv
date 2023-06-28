@@ -1,0 +1,10 @@
+tags,title,paper,dataset,code
+"multi-view, image","MVImgNet: A Large-scale Dataset of Multi-view Images","2303.06042","MVImgNet","https://github.com/GAP-LAB-CUHK-SZ/MVImgNet"
+"geolocation, image","GeoNet: Benchmarking Unsupervised Adaptation across Geographies","2303.15443","GeoNet",
+"denoising, image","Joint HDR Denoising and Fusion: A Real-World Mobile HDR Image Dataset","","Mobile-HDR","https://github.com/shuaizhengliu/joint-hdrdn"
+"optical flow, stereo, image","Spring: A High-Resolution High-Detail Dataset and Benchmark for Scene Flow, Optical Flow and Stereo","2303.01943","Spring",
+"image, editing","ImageNet-E: Benchmarking Neural Network Robustness via Attribute Editing","2303.17096","ImageNet-E","https://github.com/alibaba/easyrobust"
+"RGB-D, segmentation, video","ARKitTrack: A New Diverse Dataset for Tracking Using Mobile RGB-D Data","2303.13885","ARKitTrack","https://github.com/lawrence-cj/ARKitTrack"
+"low-light, cross-modal, IR","Diverse Embedding Expansion Network and Low-Light Cross-Modality Benchmark for Visible-Infrared Person Re-identification","2303.14481","LLCM","https://github.com/ZYK100/LLCM"
+"pose estimation, image, keypoint, tracking","JRDB-Pose: A Large-scale Dataset for Multi-Person Pose Estimation and Tracking","2210.11940v2","JRDB-Pose",
+"synthetic, domain adaptation, supervised","A New Benchmark: On the Utility of Synthetic Data with Blender for Bare Supervised Learning and Downstream Domain Adaptation","2303.09165","SynSL-120K","https://github.com/huitangtang/On_the_Utility_of_Synthetic_Data"
