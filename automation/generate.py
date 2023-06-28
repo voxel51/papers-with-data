@@ -23,7 +23,7 @@ WARNING_HEADER = [
 ]
 
 TABLE_HEADER = [
-    "| **topic** | **tags** | **paper** | **dataset** | **code** |",
+    "| **Title** | **Tags** | **Paper** | **Dataset** | **Code** |",
     "|:---------:|:---------:|:---------:|:-----------:|:--------:|"
 ]
 
@@ -51,8 +51,6 @@ def format_tags(tags):
     tags = tags.split(",")
     tags = [f"`{tag.strip()}`" for tag in tags]
     return ", ".join(tags)
-
-    # tags = tags.replace("[", "").replace("]", "").replace("'", "")
 
 def format_entry(entry: Series) -> str:
     ''' Formats entry into markdown table row. '''
