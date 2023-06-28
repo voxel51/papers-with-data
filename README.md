@@ -10,7 +10,7 @@ To make your life easier, we've combed through the **2359** papers accepted to C
    WARNING: DO NOT EDIT THIS TABLE MANUALLY. IT IS AUTOMATICALLY GENERATED.
    HEAD OVER TO CONTRIBUTING.MD FOR MORE DETAILS ON HOW TO MAKE CHANGES PROPERLY.
 -->
-| **topic** | **tags** | **paper** | **dataset** | **code** |
+| **Title** | **Tags** | **Paper** | **Dataset** | **Code** |
 |:---------:|:---------:|:---------:|:-----------:|:--------:|
 | MVImgNet: A Large-scale Dataset of Multi-view Images | `multi-view`, `image` | [![arXiv](https://img.shields.io/badge/arXiv-2303.06042-b31b1b.svg)](https://arxiv.org/abs/2303.06042)| [![FiftyOne](https://img.shields.io/badge/FiftyOne-blue)](https://cvpr.fiftyone.ai/datasets/MVImgNet/samples) | [![GitHub](https://img.shields.io/github/stars/GAP-LAB-CUHK-SZ/MVImgNet?style=social)](https://github.com/GAP-LAB-CUHK-SZ/MVImgNet) |
 | GeoNet: Benchmarking Unsupervised Adaptation across Geographies | `geolocation`, `image` | [![arXiv](https://img.shields.io/badge/arXiv-2303.15443-b31b1b.svg)](https://arxiv.org/abs/2303.15443)| [![FiftyOne](https://img.shields.io/badge/FiftyOne-blue)](https://cvpr.fiftyone.ai/datasets/GeoNet/samples) |  |
