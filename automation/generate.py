@@ -46,7 +46,9 @@ DEFAULT_CODE_PATTERN = "[![Code Badge](https://img.shields.io/badge/Code-Code.sv
 ARXIV_BADGE_PATTERN = "[![arXiv](https://img.shields.io/badge/arXiv-{}-b31b1b.svg)](https://arxiv.org/abs/{})"
 DEFAULT_PAPER_PATTERN = "[![Paper Badge](https://img.shields.io/badge/Paper-Paper.svg)]({})"
 
-FIFTYONE_DATASET_PREFIX = "https://cvpr.fiftyone.ai/datasets/"
+FIFTYONE_CVPR_DATASET_PREFIX = "https://cvpr.fiftyone.ai/datasets/"
+FIFTYONE_TRY_DATASET_PREFIX = "https://try.fiftyone.ai/datasets/"
+
 FIFTYONE_DATASET_SUFFIX = "/samples"
 
 FIFTYONE_BADGE_PATTERN = (
@@ -101,7 +103,7 @@ def format_tags(tags):
     tags = [f"`{tag.strip()}`" for tag in tags]
     return ", ".join(tags)
 
-def format_entry(entry: Series) -> str:
+def format_entry(data_file, entry: Series) -> str:
     ''' Formats entry into markdown table row. '''
     tags = format_tags(entry.loc[TAGS_COLUMN_NAME])
     title = entry.loc[TITLE_COLUMN_NAME]
@@ -114,7 +116,12 @@ def format_entry(entry: Series) -> str:
         dataset_url = ""
     if type(paper_url) == float:
         paper_url = ""
-    dataset_url = FIFTYONE_DATASET_PREFIX + dataset_url + FIFTYONE_DATASET_SUFFIX if dataset_url else ""
+    
+    if "cvpr" in data_file:
+        prefix = FIFTYONE_CVPR_DATASET_PREFIX
+    else:
+        prefix = FIFTYONE_TRY_DATASET_PREFIX
+    dataset_url = prefix + dataset_url + FIFTYONE_DATASET_SUFFIX if dataset_url else ""
     
     fiftyone_badge = FIFTYONE_BADGE_PATTERN.format(dataset_url) if dataset_url else ""
     
@@ -136,7 +143,7 @@ def load_table_entries(path: str) -> List[str]:
     df = pd.read_csv(path,  quotechar='"', dtype=str)
     df.columns = df.columns.str.strip()
     return [
-        format_entry(row)
+        format_entry(path, row)
         for _, row
         in df.iterrows()
     ]
