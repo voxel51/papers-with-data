@@ -41,7 +41,10 @@ TABLE_HEADER = [
 
 GITHUB_CODE_PREFIX = "https://github.com/"
 GITHUB_BADGE_PATTERN = "[![GitHub](https://img.shields.io/github/stars/{}?style=social)]({})"
+DEFAULT_CODE_PATTERN = "[![Code Badge](https://img.shields.io/badge/Code-Code.svg)]({})"
+
 ARXIV_BADGE_PATTERN = "[![arXiv](https://img.shields.io/badge/arXiv-{}-b31b1b.svg)](https://arxiv.org/abs/{})"
+DEFAULT_PAPER_PATTERN = "[![Paper Badge](https://img.shields.io/badge/Paper-Paper.svg)]({})"
 
 FIFTYONE_DATASET_PREFIX = "https://cvpr.fiftyone.ai/datasets/"
 FIFTYONE_DATASET_SUFFIX = "/samples"
@@ -51,6 +54,7 @@ FIFTYONE_BADGE_PATTERN = (
     f"-{BADGE_COLOR}.svg?logo=data:image/svg+xml;base64,{B64_LOGO})]"
     "({})"
 )
+
 
 CVPR_GIF = "![cvpr2023-4](https://github.com/voxel51/papers-with-data/assets/12500356/408fb4c6-3961-4909-a1a0-a756a8e8e6e8)"
 
@@ -110,13 +114,21 @@ def format_entry(entry: Series) -> str:
         dataset_url = ""
     if type(paper_url) == float:
         paper_url = ""
-    stripped_code_url = code_url.replace(GITHUB_CODE_PREFIX, "")
     dataset_url = FIFTYONE_DATASET_PREFIX + dataset_url + FIFTYONE_DATASET_SUFFIX if dataset_url else ""
     
     fiftyone_badge = FIFTYONE_BADGE_PATTERN.format(dataset_url) if dataset_url else ""
-    github_badge = GITHUB_BADGE_PATTERN.format(stripped_code_url, code_url) if code_url else ""
-    arxiv_badge = ARXIV_BADGE_PATTERN.format(paper_url, paper_url) if paper_url else ""
-    return f"| {title} | {tags} | {arxiv_badge}| {fiftyone_badge} | {github_badge} |"
+    
+    if "github" in code_url:
+        stripped_code_url = code_url.replace(GITHUB_CODE_PREFIX, "")
+        code_badge = GITHUB_BADGE_PATTERN.format(stripped_code_url, code_url) if code_url else ""
+    else:
+        code_badge = DEFAULT_CODE_PATTERN.format(code_url) if code_url else ""
+    
+    if ":" in paper_url:
+        paper_badge = DEFAULT_PAPER_PATTERN.format(paper_url)
+    else:
+        paper_badge = ARXIV_BADGE_PATTERN.format(paper_url, paper_url) if paper_url else ""
+    return f"| {title} | {tags} | {paper_badge}| {fiftyone_badge} | {code_badge} |"
 
 
 def load_table_entries(path: str) -> List[str]:
