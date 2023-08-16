@@ -1,0 +1,3 @@
+tags,title,paper,dataset,code
+"glacier, climate, SAR, satellite, image, semantic segmentation","Calving fronts and where to find them: a benchmark dataset and methodology for automatic glacier calving front extraction from synthetic aperture radar imagery","https://essd.copernicus.org/articles/14/4287/2022/","CaFFe","https://doi.pangaea.de/10.1594/PANGAEA.940950"
+"conservation, detection, SONAR, video, tracking, counting","The Caltech Fish Counting Dataset: A Benchmark for Multiple-Object Tracking and Counting","2207.09295","CFC","https://github.com/visipedia/caltech-fish-counting"
