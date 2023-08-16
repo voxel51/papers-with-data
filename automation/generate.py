@@ -3,7 +3,6 @@ import base64
 from typing import List
 
 import pandas as pd
-
 from pandas.core.series import Series
 
 
