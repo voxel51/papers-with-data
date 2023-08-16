@@ -5,7 +5,7 @@ from typing import List
 import pandas as pd
 from pandas.core.series import Series
 
-
+README_PATH = "README.md"
 
 BADGE_COLOR = "blue"
 BADGE_TEXT = "FiftyOne"
@@ -200,7 +200,8 @@ def generate_tables():
     return table_lines
 
 
-def generate_readme(readme_path):
+def generate_readme():
+    readme_path = README_PATH
     table_lines = generate_tables()
     readme_lines = read_lines_from_file(readme_path)
     readme_lines = inject_markdown_tables_into_readme(
@@ -211,5 +212,4 @@ def generate_readme(readme_path):
 
 
 if __name__ == "__main__":
-    readme_path = "README.md"
-    generate_readme(readme_path)
+    generate_readme()
