@@ -1,9 +1,20 @@
-import argparse
+import base64
+from glob import glob
 from typing import List
 
 import pandas as pd
-
 from pandas.core.series import Series
+
+README_PATH = "README.md"
+
+BADGE_COLOR = "blue"
+BADGE_TEXT = "FiftyOne"
+LOGO_FILE = "assets/voxel51_logo.svg"
+
+svg_data = open(LOGO_FILE, 'rb').read()
+# Encode in base64 and decode it to ASCII
+B64_LOGO = base64.b64encode(svg_data).decode('ascii')
+
 
 # TOPIC_COLUMN_NAME = "topic"
 TAGS_COLUMN_NAME = "tags"
@@ -30,13 +41,51 @@ TABLE_HEADER = [
 
 GITHUB_CODE_PREFIX = "https://github.com/"
 GITHUB_BADGE_PATTERN = "[![GitHub](https://img.shields.io/github/stars/{}?style=social)]({})"
-ARXIV_BADGE_PATTERN = "[![arXiv](https://img.shields.io/badge/arXiv-{}-b31b1b.svg)](https://arxiv.org/abs/{})"
+DEFAULT_CODE_PATTERN = "[![Code Badge](https://img.shields.io/badge/Code-Code.svg)]({})"
 
-FIFTYONE_DATASET_PREFIX = "https://cvpr.fiftyone.ai/datasets/"
+ARXIV_BADGE_PATTERN = "[![arXiv](https://img.shields.io/badge/arXiv-{}-b31b1b.svg)](https://arxiv.org/abs/{})"
+DEFAULT_PAPER_PATTERN = "[![Paper Badge](https://img.shields.io/badge/Paper-Paper.svg)]({})"
+
+FIFTYONE_CVPR_DATASET_PREFIX = "https://cvpr.fiftyone.ai/datasets/"
+FIFTYONE_TRY_DATASET_PREFIX = "https://try.fiftyone.ai/datasets/"
+
 FIFTYONE_DATASET_SUFFIX = "/samples"
 
-FIFTYONE_BADGE_PATTERN = "[![FiftyOne](https://img.shields.io/badge/FiftyOne-blue.svg?logo=data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDI3LjMuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IgoJIHZpZXdCb3g9IjAgMCA1MjAuNyA0NzIuNyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTIwLjcgNDcyLjc7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojRkY2RDAwO30KCS5zdDF7ZmlsbDojOUI5QjlCO30KPC9zdHlsZT4KPGcgaWQ9InN1cmZhY2UxIj4KCTxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0xMjAuOSw0My4yYzAtMi4yLDEuMy0zLjUsMi4yLTMuOGMwLjYtMC4zLDEuMy0wLjYsMi4yLTAuNmMwLjYsMCwxLjYsMC4zLDIuMiwwLjZsMTMuNyw4TDE2Ny42LDMybC0yNi44LTE1LjMKCQljLTkuNi01LjQtMjEuMS01LjQtMzEsMGMtOS42LDUuOC0xNS4zLDE1LjctMTUuMywyNi44djI4Ni4zbDI2LjIsMTUuM3YtMzAyaDAuMlY0My4yeiIvPgoJPHBhdGggY2xhc3M9InN0MCIgZD0iTTEyNy45LDQyOS42Yy0xLjksMS0zLjgsMC42LTQuNSwwYy0xLTAuNi0yLjItMS42LTIuMi0zLjh2LTE1LjdMOTUsMzk0Ljd2MzFjMCwxMS4yLDUuOCwyMS4xLDE1LjMsMjYuOAoJCWM0LjgsMi45LDEwLjIsNC4yLDE1LjMsNC4yYzUuNCwwLDEwLjUtMS4zLDE1LjMtNC4yTDQwMiwzMDEuN3YtMzAuNEwxMjcuOSw0MjkuNnoiLz4KCTxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00NzIuNCwyMDcuOGwtMjQ4LTE0My4ybC0yNi41LDE1TDQ1OSwyMzAuNWMxLjksMS4zLDIuMiwyLjksMi4yLDMuOHMtMC4zLDIuOS0yLjIsMy44bC0xMS44LDYuN3YzMC40CgkJbDI0LjktMTQuNGM5LjYtNS40LDE1LjMtMTUuNywxNS4zLTI2LjhDNDg3LjcsMjIzLjEsNDgyLDIxMy4yLDQ3Mi40LDIwNy44eiIvPgoJPHBhdGggY2xhc3M9InN0MSIgZD0iTTc5LjcsMzY4LjVsMjIuNywxMy4xbDI2LjIsMTUuM2w3LjcsNC41bDUuNCwzLjJsOTUuNS01NS4zdi05NS4yYzAtMTIuMSw2LjQtMjMuMywxNi45LTI5LjRsODIuNC00Ny42CgkJTDE5MC4yLDkyLjhsLTIyLjctMTMuMWwyMi43LTEzLjFsMjYuMi0xNS4zbDcuNy00LjVsNy43LDQuNWwxNjEsOTMuM2wzLjItMS45YzkuMy01LjQsMjEuMSwxLjMsMjEuMSwxMi4xdjMuOGwxNSw4LjZWMTQyCgkJYzAtMTIuNS02LjctMjQtMTcuMy0zMEwyNTQuNSwxOS4zYy0xMC45LTYuNC0yNC02LjQtMzQuOCwwTDEzNiw2Ny42djMwMy4ybC0yMi43LTEzLjFMODcsMzQyLjNsLTcuMy00LjJ2LTIzOGwtMjAuMSwxMS41CgkJYy0xMC45LDYuMS0xNy4zLDE3LjYtMTcuMywzMHYxODVjMCwxMi41LDYuNywyNCwxNy4zLDMwTDc5LjcsMzY4LjV6Ii8+Cgk8cGF0aCBjbGFzcz0ic3QxIiBkPSJNNDE3LjEsMjIzLjh2OTQuOWMwLDEyLjEtNi40LDIzLjMtMTYuOSwyOS40bC0xNDEuOSw4Mi4xYy05LjMsNS40LTIxLjEtMS4zLTIxLjEtMTIuMXYtMy44TDE5Ny45LDQzNwoJCWwyMS43LDEyLjVjMTAuOSw2LjQsMjQsNi40LDM0LjgsMEw0MTQuNiwzNTdjMTAuOS02LjQsMTcuMy0xNy42LDE3LjMtMzB2LTk0LjZMNDE3LjEsMjIzLjh6Ii8+CjwvZz4KPC9zdmc+Cg==)]({})"
+FIFTYONE_BADGE_PATTERN = (
+    f"[![{BADGE_TEXT}](https://img.shields.io/badge/{BADGE_TEXT}"
+    f"-{BADGE_COLOR}.svg?logo=data:image/svg+xml;base64,{B64_LOGO})]"
+    "({})"
+)
 
+
+CVPR_GIF = "![cvpr2023-4](https://github.com/voxel51/papers-with-data/assets/12500356/408fb4c6-3961-4909-a1a0-a756a8e8e6e8)"
+
+CVPR_SECTION_HEADER = f"""
+## CVPR 2023
+
+{CVPR_GIF}
+
+We've combed through the **2359** papers accepted to CVPR in 2023 and compiled
+a short-list of papers introducing exciting new datasets.
+"""
+
+YEAR_SECTION_HEADER = """
+## Papers from {}
+
+
+"""
+
+
+CLASSICS_SECTION_HEADER = """
+## Classics
+
+
+"""
+
+
+
+def create_fiftyone_badge(url):
+    return FIFTYONE_BADGE_PATTERN.format(url)
 
 def read_lines_from_file(path: str) -> List[str]:
     ''' Reads lines from file and strips trailing whitespaces. '''
@@ -54,7 +103,7 @@ def format_tags(tags):
     tags = [f"`{tag.strip()}`" for tag in tags]
     return ", ".join(tags)
 
-def format_entry(entry: Series) -> str:
+def format_entry(data_file, entry: Series) -> str:
     ''' Formats entry into markdown table row. '''
     tags = format_tags(entry.loc[TAGS_COLUMN_NAME])
     title = entry.loc[TITLE_COLUMN_NAME]
@@ -67,13 +116,26 @@ def format_entry(entry: Series) -> str:
         dataset_url = ""
     if type(paper_url) == float:
         paper_url = ""
-    stripped_code_url = code_url.replace(GITHUB_CODE_PREFIX, "")
-    dataset_url = FIFTYONE_DATASET_PREFIX + dataset_url + FIFTYONE_DATASET_SUFFIX if dataset_url else ""
+    
+    if "cvpr" in data_file:
+        prefix = FIFTYONE_CVPR_DATASET_PREFIX
+    else:
+        prefix = FIFTYONE_TRY_DATASET_PREFIX
+    dataset_url = prefix + dataset_url + FIFTYONE_DATASET_SUFFIX if dataset_url else ""
     
     fiftyone_badge = FIFTYONE_BADGE_PATTERN.format(dataset_url) if dataset_url else ""
-    github_badge = GITHUB_BADGE_PATTERN.format(stripped_code_url, code_url) if code_url else ""
-    arxiv_badge = ARXIV_BADGE_PATTERN.format(paper_url, paper_url) if paper_url else ""
-    return f"| {title} | {tags} | {arxiv_badge}| {fiftyone_badge} | {github_badge} |"
+    
+    if "github" in code_url:
+        stripped_code_url = code_url.replace(GITHUB_CODE_PREFIX, "")
+        code_badge = GITHUB_BADGE_PATTERN.format(stripped_code_url, code_url) if code_url else ""
+    else:
+        code_badge = DEFAULT_CODE_PATTERN.format(code_url) if code_url else ""
+    
+    if ":" in paper_url:
+        paper_badge = DEFAULT_PAPER_PATTERN.format(paper_url)
+    else:
+        paper_badge = ARXIV_BADGE_PATTERN.format(paper_url, paper_url) if paper_url else ""
+    return f"| {title} | {tags} | {paper_badge}| {fiftyone_badge} | {code_badge} |"
 
 
 def load_table_entries(path: str) -> List[str]:
@@ -81,7 +143,7 @@ def load_table_entries(path: str) -> List[str]:
     df = pd.read_csv(path,  quotechar='"', dtype=str)
     df.columns = df.columns.str.strip()
     return [
-        format_entry(row)
+        format_entry(path, row)
         for _, row
         in df.iterrows()
     ]
@@ -96,8 +158,8 @@ def search_lines_with_token(lines: List[str], token: str) -> List[int]:
     return result
 
 
-def inject_markdown_table_into_readme(readme_lines: List[str], table_lines: List[str]) -> List[str]:
-    ''' Injects markdown table into readme. '''
+def inject_markdown_tables_into_readme(readme_lines: List[str], table_lines: List[str]) -> List[str]:
+    ''' Injects markdown tables into readme. '''
     lines_with_token_indexes = search_lines_with_token(lines=readme_lines, token=AUTOGENERATED_COURSES_TABLE_TOKEN)
     if len(lines_with_token_indexes) != 2:
         raise Exception(f"Please inject two {AUTOGENERATED_COURSES_TABLE_TOKEN} "
@@ -107,14 +169,47 @@ def inject_markdown_table_into_readme(readme_lines: List[str], table_lines: List
     return readme_lines[:table_start_line_index + 1] + table_lines + readme_lines[table_end_line_index:]
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--data_path', default='automation/data.csv')
-    parser.add_argument('-r', '--readme_path', default='README.md')
-    args = parser.parse_args()
+def generate_section_header(data_file):
+    if "cvpr" in data_file:
+        return CVPR_SECTION_HEADER
+    elif "2" in data_file:
+        year = ''.join([char for char in data_file if char.isdigit()])
+        return YEAR_SECTION_HEADER.format(year)
+    else:
+        return CLASSICS_SECTION_HEADER
 
-    table_lines = load_table_entries(path=args.data_path)
-    table_lines = WARNING_HEADER + TABLE_HEADER + table_lines
-    readme_lines = read_lines_from_file(path=args.readme_path)
-    readme_lines = inject_markdown_table_into_readme(readme_lines=readme_lines, table_lines=table_lines)
-    save_lines_to_file(path=args.readme_path, lines=readme_lines)
+PATH = "automation/data/"
+DATA_FILES = (
+    "cvpr_2023_papers.csv",
+    "papers_with_data_2023.csv",
+    "papers_with_data_2022.csv",
+    "papers_with_data_classic.csv",
+)
+
+DATA_FILES = [PATH + data_file for data_file in DATA_FILES]
+
+
+def generate_tables():
+    table_lines = []
+    data_files = DATA_FILES
+    for data_file in data_files:
+        table_lines += [generate_section_header(data_file)]
+        table_lines += ["\n\n"] + TABLE_HEADER
+        table_lines += load_table_entries(data_file)
+    table_lines = WARNING_HEADER + table_lines
+    return table_lines
+
+
+def generate_readme():
+    readme_path = README_PATH
+    table_lines = generate_tables()
+    readme_lines = read_lines_from_file(readme_path)
+    readme_lines = inject_markdown_tables_into_readme(
+        readme_lines=readme_lines, 
+        table_lines=table_lines
+        )
+    save_lines_to_file(path=readme_path, lines=readme_lines)
+
+
+if __name__ == "__main__":
+    generate_readme()
