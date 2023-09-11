@@ -46,7 +46,6 @@ DEFAULT_CODE_PATTERN = "[![Code Badge](https://img.shields.io/badge/Code-Code.sv
 ARXIV_BADGE_PATTERN = "[![arXiv](https://img.shields.io/badge/arXiv-{}-b31b1b.svg)](https://arxiv.org/abs/{})"
 DEFAULT_PAPER_PATTERN = "[![Paper Badge](https://img.shields.io/badge/Paper-Paper.svg)]({})"
 
-FIFTYONE_CVPR_DATASET_PREFIX = "https://cvpr.fiftyone.ai/datasets/"
 FIFTYONE_TRY_DATASET_PREFIX = "https://try.fiftyone.ai/datasets/"
 
 FIFTYONE_DATASET_SUFFIX = "/samples"
@@ -67,6 +66,16 @@ CVPR_SECTION_HEADER = f"""
 
 We've combed through the **2359** papers accepted to CVPR in 2023 and compiled
 a short-list of papers introducing exciting new datasets.
+"""
+
+ICCV_SECTION_HEADER = """
+## ICCV 2023
+
+"""
+
+WACV_SECTION_HEADER = """
+## WACV 2024
+
 """
 
 YEAR_SECTION_HEADER = """
@@ -117,11 +126,9 @@ def format_entry(data_file, entry: Series) -> str:
     if type(paper_url) == float:
         paper_url = ""
     
-    if "cvpr" in data_file:
-        prefix = FIFTYONE_CVPR_DATASET_PREFIX
-    else:
-        prefix = FIFTYONE_TRY_DATASET_PREFIX
+    prefix = FIFTYONE_TRY_DATASET_PREFIX
     dataset_url = prefix + dataset_url + FIFTYONE_DATASET_SUFFIX if dataset_url else ""
+    dataset_url = dataset_url.replace(" ", "%20")
     
     fiftyone_badge = FIFTYONE_BADGE_PATTERN.format(dataset_url) if dataset_url else ""
     
@@ -172,6 +179,10 @@ def inject_markdown_tables_into_readme(readme_lines: List[str], table_lines: Lis
 def generate_section_header(data_file):
     if "cvpr" in data_file:
         return CVPR_SECTION_HEADER
+    elif "iccv" in data_file:
+        return ICCV_SECTION_HEADER
+    elif "wacv" in data_file:
+        return WACV_SECTION_HEADER
     elif "2" in data_file:
         year = ''.join([char for char in data_file if char.isdigit()])
         return YEAR_SECTION_HEADER.format(year)
@@ -180,6 +191,8 @@ def generate_section_header(data_file):
 
 PATH = "automation/data/"
 DATA_FILES = (
+    "wacv_2024_papers.csv",
+    "iccv_2023_papers.csv",
     "cvpr_2023_papers.csv",
     "papers_with_data_2023.csv",
     "papers_with_data_2022.csv",
