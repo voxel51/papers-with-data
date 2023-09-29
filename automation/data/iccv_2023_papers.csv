@@ -1,2 +1,7 @@
 tags,title,paper,dataset,code
 "image, SAR, satellite, detection, climate","Satlas: A Large-Scale, Multi-Task Dataset for Remote Sensing Image Understanding","2211.15660","SATLAS Marine Infrastructure","https://github.com/allenai/satlas"
+"3D, point cloud","Building3D: An Urban-Scale Dataset and Benchmarks for Learning Roof Structures from Point Clouds","2307.11914","Building3D",
+"image, object, ego","EgoObjects: A Large-Scale Egocentric Dataset for Fine-Grained Object Understanding","2309.08816","egoobjects-val","https://github.com/facebookresearch/EgoObjects"
+"image, similarity, caption","Equivariant Similarity for Vision-Language Foundation Models","2303.14465","eqben-test","https://github.com/Wangt-CN/EqBen"
+"video, segmentation, tracking","MOSE: A New Dataset for Video Object Segmentation in Complex Scenes","2302.01872","mose",
+"multi-object tracking, sports","SportsMOT: A Large Multi-Object Tracking Dataset in Multiple Sports Scenes","2304.05170","sportsmot-validation","https://github.com/MCG-NJU/SportsMOT"
