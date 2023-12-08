@@ -1,0 +1,6 @@
+tags,title,paper,dataset,code
+"perceptual similarity, image, synthetic, diffusion, JND, 2AFC",DreamSim: Learning New Dimensions of Human Visual Similarity using Synthetic Data,2306.09344,NIGHTS,"https://github.com/ssundaram21/dreamsim"
+"vision-language, llm, instruction-tuning, image, multimodal",Visual Instruction Tuning,2304.08485,LLaVA-Instruct,"https://github.com/haotian-liu/LLaVA"
+"reward-model, image, text-to-image, synthetic, human-preference, alignment",ImageReward: Learning and Evaluating Human Preferences for Text-to-Image Generation,2304.05977,ImageRewardDB-clean,"https://github.com/THUDM/ImageReward"
+"image-editing, synthetic, image, instruction",MagicBrush: A Manually Annotated Dataset for Instruction-Guided Image Editing,2306.10012,MagicBrish,"https://github.com/OSU-NLP-Group/MagicBrush"
+"3D, point-cloud, anomaly-detection",REAL3D-AD,2309.13226,REAL3D-AD,"https://github.com/M-3LAB/Real3D-AD"
